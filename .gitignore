@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/intellij+all,gradle,macos,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,gradle,macos,java
+# Created by https://www.toptal.com/developers/gitignore/api/intellij+all,macos,java,gradle
+# Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,macos,java,gradle
 
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -175,8 +175,8 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# End of https://www.toptal.com/developers/gitignore/api/intellij+all,gradle,macos,java
-
-# Front-end
+### Front-end ###
 **/front-end/node_modules/**
 **/front-end/static/**
+
+# End of https://www.toptal.com/developers/gitignore/api/intellij+all,macos,java,gradle
