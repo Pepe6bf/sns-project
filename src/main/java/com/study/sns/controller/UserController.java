@@ -14,10 +14,14 @@ public class UserController {
     private final UserService userService;
 
     // TODO : implement
-    @PostMapping
+    @PostMapping("/join")
     public void join() {
         // join
         userService.join();
+    }
 
+    @PostMapping("/login")
+    public void login() {
+        userService.login();
     }
 }

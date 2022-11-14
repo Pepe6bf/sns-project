@@ -10,4 +10,9 @@ public class UserService {
     public User join() {
         return new User();
     }
+
+    // TODO : implement
+    public String login() {
+        return "test_token";
+    }
 }
