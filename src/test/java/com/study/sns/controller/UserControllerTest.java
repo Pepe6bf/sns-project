@@ -2,6 +2,7 @@ package com.study.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.sns.controller.request.UserJoinRequest;
+import com.study.sns.controller.request.UserLoginRequest;
 import com.study.sns.exception.SnsApplicationException;
 import com.study.sns.model.User;
 import com.study.sns.service.UserService;
@@ -35,7 +36,7 @@ public class UserControllerTest {
 
         when(userService.join()).thenReturn(mock(User.class));
 
-        mockMvc.perform(post("/api/v1/auth/join")
+        mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, password)))
@@ -45,17 +46,68 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("회원가입 실패 테스트 - 이미 가입된 이메일로 회원 가입을 시도하는 경우")
-    void 회원가입_존재하는_아이디() throws Exception {
+    void 회원가입실패_존재하는_아이디() throws Exception {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
         when(userService.join()).thenThrow(new SnsApplicationException());
 
-        mockMvc.perform(post("/api/v1/auth/join")
+        mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, password)))
                 ).andDo(print())
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    void 로그인() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login()).thenReturn("test_token");
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 존재하지 않는 email로 로그인 하는 경우")
+    void 로그인실패_존재하지않는_회원() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login()).thenThrow(new SnsApplicationException());
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                ).andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 일치하지 않는 비밀번호로 로그인 하는 경우")
+    void 로그인실패_일치하지않는_패스워드() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login()).thenThrow(new SnsApplicationException());
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 }
