@@ -2,7 +2,7 @@ package com.study.sns.service;
 
 import com.study.sns.exception.SnsApplicationException;
 import com.study.sns.fixture.UserFixture;
-import com.study.sns.model.User;
+import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

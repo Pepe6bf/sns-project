@@ -1,6 +1,6 @@
 package com.study.sns.repository;
 
-import com.study.sns.model.User;
+import com.study.sns.model.entity.User;
 import com.study.sns.model.UserJoinResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
