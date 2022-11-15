@@ -1,7 +1,7 @@
 package com.study.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.sns.controller.request.UserJoinRequest;
+import com.study.sns.controller.request.UserJoinRequestDto;
 import com.study.sns.controller.request.UserLoginRequest;
 import com.study.sns.exception.SnsApplicationException;
 import com.study.sns.model.UserJoinResponseDto;
@@ -39,7 +39,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, password)))
+                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -55,7 +55,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(email, password)))
+                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
                 ).andDo(print())
                 .andExpect(status().isConflict());
     }

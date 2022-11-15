@@ -1,6 +1,6 @@
 package com.study.sns.fixture;
 
-import com.study.sns.model.User;
+import com.study.sns.model.entity.User;
 
 public class UserFixture {
 
