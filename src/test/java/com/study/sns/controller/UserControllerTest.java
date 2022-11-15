@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.sns.controller.request.UserJoinRequest;
 import com.study.sns.controller.request.UserLoginRequest;
 import com.study.sns.exception.SnsApplicationException;
-import com.study.sns.model.User;
+import com.study.sns.model.UserJoinResponseDto;
 import com.study.sns.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join()).thenReturn(mock(User.class));
+        when(userService.join(email, password)).thenReturn(mock(UserJoinResponseDto.class));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -50,7 +50,7 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join()).thenThrow(new SnsApplicationException());
+        when(userService.join(email, password)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +67,7 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testPw1234!";
         // When
-        when(userService.login()).thenReturn("test_token");
+        when(userService.login(email, password)).thenReturn("test_token");
 
         // Then
         mockMvc.perform(post("/api/v1/users/login")
@@ -84,7 +84,7 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testPw1234!";
         // When
-        when(userService.login()).thenThrow(new SnsApplicationException());
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
 
         // Then
         mockMvc.perform(post("/api/v1/users/login")
@@ -101,7 +101,7 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testPw1234!";
         // When
-        when(userService.login()).thenThrow(new SnsApplicationException());
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
 
         // Then
         mockMvc.perform(post("/api/v1/users/login")
