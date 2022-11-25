@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.sns.controller.request.UserJoinRequestDto;
 import com.study.sns.controller.request.UserLoginRequest;
 import com.study.sns.exception.SnsApplicationException;
-import com.study.sns.model.UserJoinResponseDto;
+import com.study.sns.fixture.UserFixture;
+import com.study.sns.model.dto.UserDto;
 import com.study.sns.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,9 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
-    @MockBean private UserService userService;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
+    private UserService userService;
 
     @Test
     @DisplayName("회원가입 성공 테스트")
@@ -34,7 +38,15 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join(email, password)).thenReturn(mock(UserJoinResponseDto.class));
+        when(userService.join(email, password))
+                .thenReturn(
+                        UserDto.fromEntity(
+                                UserFixture.get(
+                                        email,
+                                        password
+                                )
+                        )
+                );
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
