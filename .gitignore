@@ -181,5 +181,6 @@ gradle-app.setting
 
 ### yml
 src/main/resources/application-heroku.yml
+src/main/resources/application-jwt.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,macos,java,gradle
