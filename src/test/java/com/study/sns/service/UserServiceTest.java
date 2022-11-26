@@ -1,8 +1,7 @@
 package com.study.sns.service;
 
-import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.fixture.UserFixture;
-import com.study.sns.model.entity.User;
+import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -25,6 +25,9 @@ class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
     @Test
     @DisplayName("회원가입 성공 테스트")
     void 회원가입이_정상적으로_동작하는_경우() throws Exception {
@@ -34,6 +37,7 @@ class UserServiceTest {
 
         // When
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(password)).thenReturn("encrypt_password");
         when(userRepository.save(any())).thenReturn(UserFixture.get(email, password));
 
         // Then
@@ -49,6 +53,7 @@ class UserServiceTest {
 
         // When
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(UserFixture.get(email, password)));
+        when(passwordEncoder.encode(password)).thenReturn("encrypt_password");
         when(userRepository.save(any())).thenReturn(Optional.of(UserFixture.get(email, password)));
 
         // Then
