@@ -1,6 +1,7 @@
 package com.study.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.study.sns.dto.LocalLoginDto;
 import com.study.sns.global.exception.AccountErrorCode;
 import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.fixture.UserFixture;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
@@ -29,6 +31,8 @@ public class UserControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @MockBean
     private UserService userService;
 
@@ -41,16 +45,11 @@ public class UserControllerTest {
         when(userService.join(email, password))
                 .thenReturn(
                         UserDto.fromEntity(
-                                UserFixture.get(
-                                        email,
-                                        password
-                                )
-                        )
-                );
+                                UserFixture.get(email, password))
+                        );
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request body
                         .content(objectMapper
                                 .writeValueAsBytes(
                                         new UserJoinDto.Request(email, password)
@@ -69,8 +68,7 @@ public class UserControllerTest {
         when(userService.join(email, password))
                 .thenThrow(
                         new SnsApplicationException(
-                                AccountErrorCode.DUPLICATED_USER_EMAIL,
-                                ""
+                                AccountErrorCode.DUPLICATED_USER_EMAIL
                         )
                 );
 
@@ -86,54 +84,54 @@ public class UserControllerTest {
                 .andExpect(status().isConflict());
     }
 
-//    @Test
-//    @DisplayName("로그인 성공 테스트")
-//    void 로그인() throws Exception {
-//        // Given
-//        String email = "tester@email.com";
-//        String password = "testPw1234!";
-//        // When
-//        when(userService.login(email, password)).thenReturn("test_token");
-//
-//        // Then
-//        mockMvc.perform(post("/api/v1/users/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
-//                ).andDo(print())
-//                .andExpect(status().isOk());
-//    }
-//
-//    @Test
-//    @DisplayName("로그인 실패 테스트 - 존재하지 않는 email로 로그인 하는 경우")
-//    void 로그인실패_존재하지않는_회원() throws Exception {
-//        // Given
-//        String email = "tester@email.com";
-//        String password = "testPw1234!";
-//        // When
-//        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
-//
-//        // Then
-//        mockMvc.perform(post("/api/v1/users/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
-//                ).andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
-//
-//    @Test
-//    @DisplayName("로그인 실패 테스트 - 일치하지 않는 비밀번호로 로그인 하는 경우")
-//    void 로그인실패_일치하지않는_패스워드() throws Exception {
-//        // Given
-//        String email = "tester@email.com";
-//        String password = "testPw1234!";
-//        // When
-//        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
-//
-//        // Then
-//        mockMvc.perform(post("/api/v1/users/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
-//                ).andDo(print())
-//                .andExpect(status().isUnauthorized());
-//    }
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    void 로그인() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login(email, password)).thenReturn("test_token");
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 존재하지 않는 email로 로그인 하는 경우")
+    void 로그인실패_존재하지않는_회원() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND));
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
+                ).andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("로그인 실패 테스트 - 일치하지 않는 비밀번호로 로그인 하는 경우")
+    void 로그인실패_일치하지않는_패스워드() throws Exception {
+        // Given
+        String email = "tester@email.com";
+        String password = "testPw1234!";
+        // When
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.INVALID_PASSWORD));
+
+        // Then
+        mockMvc.perform(post("/api/v1/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
 }
