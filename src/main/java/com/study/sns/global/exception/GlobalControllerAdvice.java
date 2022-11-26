@@ -11,13 +11,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(SnsApplicationException.class)
-    public ResponseEntity<?> applicationHandler(SnsApplicationException e) {
+    public ResponseEntity<?> snsApplicationExceptionHandler(SnsApplicationException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
+                .body(ErrorResponse.of(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e) {
+        log.error("Error occurs {}", e.toString());
+        return ResponseEntity
+                .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getStatus())
                 .body(ErrorResponse.of(
-                        e.getErrorCode(),
-                        e.getMessage()
+                        GlobalErrorCode.INTERNAL_SERVER_ERROR
                 ));
     }
 }

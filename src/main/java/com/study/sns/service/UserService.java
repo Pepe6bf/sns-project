@@ -1,19 +1,23 @@
 package com.study.sns.service;
 
+import com.study.sns.dto.UserDto;
 import com.study.sns.global.exception.AccountErrorCode;
 import com.study.sns.global.exception.SnsApplicationException;
-import com.study.sns.dto.UserDto;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public UserDto join(
             String email,
             String password
@@ -22,15 +26,17 @@ public class UserService {
         userRepository
                 .findByEmail(email)
                 .ifPresent(it -> {
-                    throw new SnsApplicationException(
-                            AccountErrorCode.DUPLICATED_USER_EMAIL,
-                            String.format("%s is duplicated", email)
-                    );
+                    throw new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL);
                 });
 
         // 회원가입 진행 및 응답
         return UserDto.fromEntity(
-                userRepository.save(User.of(email, password))
+                userRepository.save(
+                        User.of(
+                                email,
+                                passwordEncoder.encode(password)
+                        )
+                )
         );
     }
 
