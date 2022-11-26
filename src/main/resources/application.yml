@@ -1,5 +1,8 @@
 spring:
-  profiles.active: heroku
+  profiles:
+    active:
+    - heroku
+    - jwt
   datasource:
     hikari.maximum-pool-size: 4
     driver-class-name: ${spring.datasource.driver-class-name}
@@ -13,3 +16,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+# JWT 설정 값
+jwt:
+  secret-key: ${jwt.secret-key}
+  token:
+    expired-time-ms: ${jwt.token.expired-time-ms}
