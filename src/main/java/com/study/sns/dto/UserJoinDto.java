@@ -1,37 +1,29 @@
 package com.study.sns.dto;
 
 import com.study.sns.model.constant.UserRole;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserJoinDto {
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Request {
 
-        private String email;
+        public Request(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
 
+        private String email;
         private String password;
     }
 
     @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Response {
         private final Long userId;
         private final String email;
-        private UserRole role;
-
-        private Response(
-                Long userId,
-                String email,
-                UserRole role
-        ) {
-            this.userId = userId;
-            this.email = email;
-            this.role = role;
-        }
+        private final UserRole role;
 
         public static Response of(UserDto userDto) {
             return new Response(
