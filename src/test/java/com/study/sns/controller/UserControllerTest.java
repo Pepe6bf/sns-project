@@ -1,10 +1,12 @@
 package com.study.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.sns.controller.request.UserJoinRequestDto;
-import com.study.sns.controller.request.UserLoginRequest;
-import com.study.sns.exception.SnsApplicationException;
-import com.study.sns.model.UserJoinResponseDto;
+import com.study.sns.dto.LocalLoginDto;
+import com.study.sns.global.exception.AccountErrorCode;
+import com.study.sns.global.exception.SnsApplicationException;
+import com.study.sns.fixture.UserFixture;
+import com.study.sns.dto.UserDto;
+import com.study.sns.dto.UserJoinDto;
 import com.study.sns.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,9 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
-    @MockBean private UserService userService;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @MockBean
+    private UserService userService;
 
     @Test
     @DisplayName("회원가입 성공 테스트")
@@ -34,28 +42,44 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join(email, password)).thenReturn(mock(UserJoinResponseDto.class));
+        when(userService.join(email, password))
+                .thenReturn(
+                        UserDto.fromEntity(
+                                UserFixture.get(email, password))
+                        );
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
+                        .content(objectMapper
+                                .writeValueAsBytes(
+                                        new UserJoinDto.Request(email, password)
+                                )
+                        )
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("회원가입 실패 테스트 - 이미 가입된 이메일로 회원 가입을 시도하는 경우")
-    void 회원가입실패_존재하는_아이디() throws Exception {
+    void 회원가입실패_존재하는_이메일() throws Exception {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join(email, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(email, password))
+                .thenThrow(
+                        new SnsApplicationException(
+                                AccountErrorCode.DUPLICATED_USER_EMAIL
+                        )
+                );
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
+                        .content(objectMapper
+                                .writeValueAsBytes(
+                                        new UserJoinDto.Request(email, password)
+                                )
+                        )
                 ).andDo(print())
                 .andExpect(status().isConflict());
     }
@@ -72,7 +96,7 @@ public class UserControllerTest {
         // Then
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -84,12 +108,12 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testPw1234!";
         // When
-        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND));
 
         // Then
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -101,12 +125,12 @@ public class UserControllerTest {
         String email = "tester@email.com";
         String password = "testPw1234!";
         // When
-        when(userService.login(email, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.INVALID_PASSWORD));
 
         // Then
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(email, password)))
+                        .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
     }
