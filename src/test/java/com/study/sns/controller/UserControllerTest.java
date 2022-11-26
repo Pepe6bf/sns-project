@@ -1,11 +1,12 @@
 package com.study.sns.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.sns.controller.request.UserJoinRequestDto;
 import com.study.sns.controller.request.UserLoginRequest;
-import com.study.sns.exception.SnsApplicationException;
+import com.study.sns.global.exception.AccountErrorCode;
+import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.fixture.UserFixture;
 import com.study.sns.model.dto.UserDto;
+import com.study.sns.model.dto.UserJoinDto;
 import com.study.sns.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,23 +52,37 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
+                        .content(objectMapper
+                                .writeValueAsBytes(
+                                        new UserJoinDto.Request(email, password)
+                                )
+                        )
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("회원가입 실패 테스트 - 이미 가입된 이메일로 회원 가입을 시도하는 경우")
-    void 회원가입실패_존재하는_아이디() throws Exception {
+    void 회원가입실패_존재하는_이메일() throws Exception {
         String email = "tester@email.com";
         String password = "testerPw1234!";
 
-        when(userService.join(email, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(email, password))
+                .thenThrow(
+                        new SnsApplicationException(
+                                AccountErrorCode.DUPLICATED_USER_EMAIL,
+                                ""
+                        )
+                );
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequestDto(email, password)))
+                        .content(objectMapper
+                                .writeValueAsBytes(
+                                        new UserJoinDto.Request(email, password)
+                                )
+                        )
                 ).andDo(print())
                 .andExpect(status().isConflict());
     }

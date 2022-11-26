@@ -1,6 +1,6 @@
 package com.study.sns.service;
 
-import com.study.sns.exception.SnsApplicationException;
+import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.fixture.UserFixture;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
