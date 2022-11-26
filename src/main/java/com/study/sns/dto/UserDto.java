@@ -1,4 +1,4 @@
-package com.study.sns.model.dto;
+package com.study.sns.dto;
 
 import com.study.sns.model.constant.UserRole;
 import com.study.sns.model.constant.UserStatus;

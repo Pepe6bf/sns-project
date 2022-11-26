@@ -1,6 +1,5 @@
 package com.study.sns.fixture;
 
-import com.study.sns.model.dto.UserDto;
 import com.study.sns.model.entity.User;
 
 public class UserFixture {

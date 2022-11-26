@@ -2,7 +2,7 @@ package com.study.sns.controller;
 
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
-import com.study.sns.model.dto.UserJoinDto;
+import com.study.sns.dto.UserJoinDto;
 import com.study.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

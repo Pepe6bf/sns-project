@@ -2,7 +2,7 @@ package com.study.sns.service;
 
 import com.study.sns.global.exception.AccountErrorCode;
 import com.study.sns.global.exception.SnsApplicationException;
-import com.study.sns.model.dto.UserDto;
+import com.study.sns.dto.UserDto;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
