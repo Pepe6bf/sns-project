@@ -33,11 +33,7 @@ public class UserService {
             String password
     ) {
         // 이미 가입된 email 인지 검증
-        userRepository
-                .findByEmail(email)
-                .ifPresent(it -> {
-                    throw new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL);
-                });
+        findUser(email);
 
         // 회원가입 진행 및 응답
         return UserDto.fromEntity(
@@ -58,11 +54,7 @@ public class UserService {
             String password
     ) {
         // 회원가입 여부 체크
-        User userEntity = userRepository
-                .findByEmail(email)
-                .orElseThrow(
-                        () -> new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND)
-                );
+        User userEntity = findUser(email);
 
         // 비밀번호 체크
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
@@ -75,5 +67,14 @@ public class UserService {
                 secretKey,
                 expiredTimeMs
         );
+    }
+
+    // 주어진 이메일의 사용자 객체를 조회하는 메서드
+    public User findUser(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(
+                        () -> new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND)
+                );
     }
 }
