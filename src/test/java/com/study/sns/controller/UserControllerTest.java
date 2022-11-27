@@ -48,7 +48,7 @@ public class UserControllerTest {
                                 UserFixture.get(email, password))
                         );
 
-        mockMvc.perform(post("/api/v1/users/join")
+        mockMvc.perform(post("/api/v1/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper
                                 .writeValueAsBytes(
@@ -72,7 +72,7 @@ public class UserControllerTest {
                         )
                 );
 
-        mockMvc.perform(post("/api/v1/users/join")
+        mockMvc.perform(post("/api/v1/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         // TODO : add request body
                         .content(objectMapper
@@ -94,7 +94,7 @@ public class UserControllerTest {
         when(userService.login(email, password)).thenReturn("test_token");
 
         // Then
-        mockMvc.perform(post("/api/v1/users/login")
+        mockMvc.perform(post("/api/v1/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
@@ -111,7 +111,7 @@ public class UserControllerTest {
         when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND));
 
         // Then
-        mockMvc.perform(post("/api/v1/users/login")
+        mockMvc.perform(post("/api/v1/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
@@ -128,7 +128,7 @@ public class UserControllerTest {
         when(userService.login(email, password)).thenThrow(new SnsApplicationException(AccountErrorCode.INVALID_PASSWORD));
 
         // Then
-        mockMvc.perform(post("/api/v1/users/login")
+        mockMvc.perform(post("/api/v1/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new LocalLoginDto.Request(email, password)))
                 ).andDo(print())
