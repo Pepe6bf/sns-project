@@ -12,7 +12,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(SnsApplicationException.class)
     public ResponseEntity<?> snsApplicationExceptionHandler(SnsApplicationException e) {
-        log.error("Error occurs {}", e.toString());
+        log.error("Error occurs {}", e.getStackTrace());
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .body(ErrorResponse.of(e.getErrorCode()));
@@ -20,7 +20,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e) {
-        log.error("Error occurs {}", e.toString());
+        log.error("Error occurs {}", e);
         return ResponseEntity
                 .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getStatus())
                 .body(ErrorResponse.of(
