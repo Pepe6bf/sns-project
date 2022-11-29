@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/article")
 @RestController
@@ -30,8 +28,7 @@ public class ArticleController {
             Authentication authentication
     ) {
         return responseService.getSingleResult(
-                OK.value(),
-                "게시글이 성공적으로 작성되었습니다.",null
+                "게시글이 성공적으로 작성되었습니다.", null
 //                CreateArticleDto.Response.of(
 //                        articleService.createArticle(
 //                                req.getTitle(),

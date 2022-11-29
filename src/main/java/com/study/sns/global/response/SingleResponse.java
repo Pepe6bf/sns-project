@@ -9,11 +9,10 @@ public class SingleResponse<T> extends CommonResponse {
 
     public SingleResponse(
             Boolean isSuccess,
-            Integer status,
             String message,
             T data
     ) {
-        super(isSuccess, status, message);
+        super(isSuccess, message);
         this.data = data;
     }
 }
