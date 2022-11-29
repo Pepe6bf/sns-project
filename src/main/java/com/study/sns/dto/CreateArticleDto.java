@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class CreateArticleDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Request {
 
         public Request(String title, String content) {
