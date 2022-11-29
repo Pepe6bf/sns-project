@@ -1,6 +1,5 @@
 package com.study.sns.service;
 
-import com.study.sns.dto.ArticleDto;
 import com.study.sns.model.entity.Article;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.ArticleRepository;
@@ -23,11 +22,11 @@ public class ArticleService {
     @Transactional
     public void createArticle(
             String title,
-            String content,
-            String email
+            String content
     ) {
-        // user find
-        User user = userService.loadUserByEmail(email);
+
+        // 현재 로그인 중인 사용자 엔티티 로드
+        User user = userService.getCurrentUser();
 
         // article save
         Article savedArticle = articleRepository.save(
@@ -39,5 +38,12 @@ public class ArticleService {
         );
 
 //        return ArticleDto.fromEntity(savedArticle);
+    }
+
+    public void updateArticle(
+            String title,
+            String content
+    ) {
+
     }
 }

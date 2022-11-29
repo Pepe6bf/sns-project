@@ -7,6 +7,8 @@ import com.study.sns.jwt.JwtService;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +78,11 @@ public class UserService {
                 .orElseThrow(
                         () -> new SnsApplicationException(AccountErrorCode.USER_NOT_FOUND)
                 );
+    }
+
+    // 현재 로그인 중인 사용자 entity 를 반환하는 메서드
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return loadUserByEmail(authentication.getName());
     }
 }

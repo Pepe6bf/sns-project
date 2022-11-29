@@ -24,16 +24,14 @@ public class ArticleController {
      */
     @PostMapping
     public SingleResponse<CreateArticleDto.Response> createArticle(
-            @RequestBody CreateArticleDto.Request req,
-            Authentication authentication
+            @RequestBody CreateArticleDto.Request req
     ) {
         return responseService.getSingleResult(
                 "게시글이 성공적으로 작성되었습니다.", null
 //                CreateArticleDto.Response.of(
 //                        articleService.createArticle(
 //                                req.getTitle(),
-//                                req.getContent(),
-//                                authentication.getName()
+//                                req.getContent()
 //                        )
 //                )
         );
