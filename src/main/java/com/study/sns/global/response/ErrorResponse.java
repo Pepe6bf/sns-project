@@ -1,6 +1,7 @@
 package com.study.sns.global.response;
 
 import com.study.sns.global.exception.ErrorCode;
+import com.study.sns.global.util.GsonUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 public class ErrorResponse {
 
     private String message;
-    private int status;
     private String code;
     private List<FieldError> errors;
     private LocalDateTime timestamp;
@@ -25,7 +25,6 @@ public class ErrorResponse {
             final ErrorCode errorCode
     ) {
         this.message = errorCode.getMessage();
-        this.status = errorCode.getStatus().value();
         this.code = errorCode.getCode();
         this.errors = new ArrayList<>();
         this.timestamp = LocalDateTime.now();
@@ -36,7 +35,6 @@ public class ErrorResponse {
             final String message
     ) {
         this.message = message;
-        this.status = errorCode.getStatus().value();
         this.code = errorCode.getCode();
         this.errors = new ArrayList<>();
         this.timestamp = LocalDateTime.now();
@@ -47,7 +45,6 @@ public class ErrorResponse {
             final List<FieldError> errors
     ) {
         this.message = errorCode.getMessage();
-        this.status = errorCode.getStatus().value();
         this.code = errorCode.getCode();
         this.errors = errors;
         this.timestamp = LocalDateTime.now();
@@ -121,5 +118,10 @@ public class ErrorResponse {
                             error.getDefaultMessage()))
                     .collect(Collectors.toList());
         }
+    }
+
+    // Object -> Json (필터에서 사용)
+    public String convertJson() {
+        return new GsonUtil().toJson(this);
     }
 }
