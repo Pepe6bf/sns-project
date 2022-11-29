@@ -3,10 +3,10 @@ package com.study.sns.service;
 import com.study.sns.dto.UserDto;
 import com.study.sns.global.exception.AccountErrorCode;
 import com.study.sns.global.exception.SnsApplicationException;
+import com.study.sns.jwt.JwtService;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +19,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-    @Value("${jwt.token.expired-time-ms}")
-    private Long expiredTimeMs;
-
     /**
      * 회원가입을 수행하는 비즈니스 로직
      */
@@ -33,7 +28,7 @@ public class UserService {
             String password
     ) {
         // 이미 가입된 email 인지 검증
-        findUser(email);
+        checkUserExist(email);
 
         // 회원가입 진행 및 응답
         return UserDto.fromEntity(
@@ -54,7 +49,7 @@ public class UserService {
             String password
     ) {
         // 회원가입 여부 체크
-        User userEntity = findUser(email);
+        User userEntity = loadUserByEmail(email);
 
         // 비밀번호 체크
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
@@ -62,15 +57,20 @@ public class UserService {
         }
 
         // 토큰 생성
-        return jwtService.generateToken(
-                email,
-                secretKey,
-                expiredTimeMs
-        );
+        return jwtService.generateToken(email);
     }
 
-    // 주어진 이메일의 사용자 객체를 조회하는 메서드
-    public User findUser(String email) {
+    // 존재하는 사용자인지 검증
+    private void checkUserExist(String email) {
+        userRepository
+                .findByEmail(email)
+                .ifPresent(it -> {
+                    throw new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL);
+                });
+    }
+
+    // 주어진 이메일의 사용자 객체를 로드하는 메서드
+    public User loadUserByEmail(String email) {
         return userRepository
                 .findByEmail(email)
                 .orElseThrow(

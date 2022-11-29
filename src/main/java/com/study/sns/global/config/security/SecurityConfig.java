@@ -1,5 +1,11 @@
 package com.study.sns.global.config.security;
 
+import com.study.sns.jwt.CustomAuthenticationEntryPoint;
+import com.study.sns.jwt.filter.JwtTokenFilter;
+import com.study.sns.jwt.JwtService;
+import com.study.sns.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,13 +14,21 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${jwt.secret-key}")
+    private String key;
+
+    private final JwtService jwtService;
+    private final UserService userService;
+
     /**
-     * Security 메인 설정
+     * HTTP 보안 설정
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,8 +43,21 @@ public class SecurityConfig {
 
         // 권한별 접근 요청 설정
         http.authorizeRequests()
-                .antMatchers("/api/*/users/join", "/api/*/users/login").permitAll()
+                .antMatchers("/api/*/user/join", "/api/*/user/login").permitAll()
                 .antMatchers("/api/**").authenticated();
+
+        // JWT Filter 설정
+        http.addFilterBefore(
+                        // req 에 포함된 토큰을 확인 후 사용자 정보를 추출
+                        new JwtTokenFilter(
+                                key,
+                                jwtService,
+                                userService
+                        ),
+                        UsernamePasswordAuthenticationFilter.class
+                )
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         return http.build();
     }
@@ -39,7 +66,7 @@ public class SecurityConfig {
      * Password Encoder
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

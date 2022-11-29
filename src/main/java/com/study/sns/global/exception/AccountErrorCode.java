@@ -10,9 +10,10 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public enum AccountErrorCode implements ErrorCode {
 
-    DUPLICATED_USER_EMAIL(CONFLICT, "ACC-001", "이미 존재하는 이메일입니다."),
-    USER_NOT_FOUND(NOT_FOUND, "ACC-002", "존재하지 않는 사용자 입니다."),
-    INVALID_PASSWORD(UNAUTHORIZED, "ACC-003", "패스워드가 일치하지 않습니다.");
+    DUPLICATED_USER_EMAIL(CONFLICT, "ACC-001", "Duplicated user email"),
+    USER_NOT_FOUND(NOT_FOUND, "ACC-002", "User not found"),
+    INVALID_PASSWORD(UNAUTHORIZED, "ACC-003", "Invalid Password"),
+    INVALID_TOKEN(UNAUTHORIZED, "ACC-004", "Invalid Token");
 
     private final HttpStatus status;
     private final String code;

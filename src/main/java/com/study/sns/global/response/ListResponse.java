@@ -11,11 +11,10 @@ public class ListResponse<T> extends CommonResponse {
 
     public ListResponse(
             Boolean isSuccess,
-            Integer status,
             String message,
             List<T> data
     ) {
-        super(isSuccess, status, message);
+        super(isSuccess, message);
         this.data = data;
     }
 }

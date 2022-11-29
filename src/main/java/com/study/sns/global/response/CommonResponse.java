@@ -9,7 +9,5 @@ public class CommonResponse {
 
     private final Boolean isSuccess;
 
-    private final Integer status;
-
     private final String message;
 }
