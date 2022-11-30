@@ -1,7 +1,8 @@
-package com.study.sns.model.entity;
+package com.study.sns.domain.post.model.entity;
 
 import com.study.sns.global.config.audit.BaseEntity;
-import com.study.sns.model.constant.ArticleStatus;
+import com.study.sns.domain.post.model.constant.PostStatus;
+import com.study.sns.domain.user.model.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "\"article\"",
+        name = "\"post\"",
         indexes = {
                 @Index(columnList = "title"),
                 @Index(columnList = "content"),
@@ -19,7 +20,7 @@ import javax.persistence.*;
         }
 )
 @Entity
-public class Article extends BaseEntity {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,22 +34,22 @@ public class Article extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "status")
-    private ArticleStatus status = ArticleStatus.ACTIVE;
+    private PostStatus status = PostStatus.ACTIVE;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
-    private Article(String title, String content, User user) {
+    private Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.user = user;
     }
 
-    public static Article of(
+    public static Post of(
             String title,
             String content,
             User user
     ) {
-        return new Article(title, content, user);
+        return new Post(title, content, user);
     }
 }

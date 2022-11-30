@@ -1,35 +1,34 @@
-package com.study.sns.controller;
+package com.study.sns.domain.post.controller;
 
-import com.study.sns.dto.CreateArticleDto;
+import com.study.sns.domain.post.dto.CreatePostDto;
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
-import com.study.sns.service.ArticleService;
+import com.study.sns.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/article")
+@RequestMapping("/api/v1/post")
 @RestController
-public class ArticleController {
+public class PostController {
 
-    private final ArticleService articleService;
+    private final PostService postService;
     private final ResponseService responseService;
 
     /**
      * 게시글 생성 API
      */
     @PostMapping
-    public SingleResponse<CreateArticleDto.Response> createArticle(
-            @RequestBody CreateArticleDto.Request req
+    public SingleResponse<CreatePostDto.Response> createPost(
+            @RequestBody CreatePostDto.Request req
     ) {
         return responseService.getSingleResult(
                 "게시글이 성공적으로 작성되었습니다.",
-                CreateArticleDto.Response.of(
-                        articleService.createArticle(
+                CreatePostDto.Response.of(
+                        postService.createPost(
                                 req.getTitle(),
                                 req.getContent()
                         )

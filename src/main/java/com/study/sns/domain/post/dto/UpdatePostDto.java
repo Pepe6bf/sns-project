@@ -1,4 +1,4 @@
-package com.study.sns.dto;
+package com.study.sns.domain.post.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateArticleDto {
+public class UpdatePostDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,12 +26,13 @@ public class CreateArticleDto {
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Response {
-        private final Long articleId;
+        private final Long postId;
         private final LocalDateTime createdAt;
-        public static Response of(ArticleDto articleDto) {
+
+        public static Response of(PostDto postDto) {
             return new Response(
-                    articleDto.getId(),
-                    articleDto.getCreatedAt()
+                    postDto.getPostId(),
+                    postDto.getCreatedAt()
             );
         }
     }
