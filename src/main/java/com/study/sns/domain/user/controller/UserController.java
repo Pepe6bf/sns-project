@@ -4,7 +4,7 @@ import com.study.sns.dto.LocalLoginDto;
 import com.study.sns.dto.UserJoinDto;
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
-import com.study.sns.service.UserService;
+import com.study.sns.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

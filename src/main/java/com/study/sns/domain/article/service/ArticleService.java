@@ -1,5 +1,6 @@
 package com.study.sns.service;
 
+import com.study.sns.dto.ArticleDto;
 import com.study.sns.model.entity.Article;
 import com.study.sns.model.entity.User;
 import com.study.sns.repository.ArticleRepository;
@@ -20,7 +21,7 @@ public class ArticleService {
      * 게시글을 생성하는 비즈니스 로직
      */
     @Transactional
-    public void createArticle(
+    public ArticleDto createArticle(
             String title,
             String content
     ) {
@@ -37,13 +38,24 @@ public class ArticleService {
                 )
         );
 
-//        return ArticleDto.fromEntity(savedArticle);
+        return ArticleDto.fromEntity(savedArticle);
     }
 
+    /**
+     * 게시글을 수정하는 비즈니스 로직
+     */
+    @Transactional
     public void updateArticle(
             String title,
-            String content
+            String content,
+            Long postId
     ) {
+
+        User user = userService.getCurrentUser();
+
+        // article exist
+
+        // article permission
 
     }
 }

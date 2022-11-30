@@ -27,13 +27,13 @@ public class ArticleController {
             @RequestBody CreateArticleDto.Request req
     ) {
         return responseService.getSingleResult(
-                "게시글이 성공적으로 작성되었습니다.", null
-//                CreateArticleDto.Response.of(
-//                        articleService.createArticle(
-//                                req.getTitle(),
-//                                req.getContent()
-//                        )
-//                )
+                "게시글이 성공적으로 작성되었습니다.",
+                CreateArticleDto.Response.of(
+                        articleService.createArticle(
+                                req.getTitle(),
+                                req.getContent()
+                        )
+                )
         );
     }
 }
