@@ -29,8 +29,7 @@ public class PostController {
                 "게시글이 성공적으로 작성되었습니다.",
                 CreatePostDto.Response.of(
                         postService.createPost(
-                                req.getTitle(),
-                                req.getContent()
+                                req
                         )
                 )
         );

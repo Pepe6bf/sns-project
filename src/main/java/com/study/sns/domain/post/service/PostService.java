@@ -1,6 +1,8 @@
 package com.study.sns.domain.post.service;
 
+import com.study.sns.domain.post.dto.CreatePostDto;
 import com.study.sns.domain.post.dto.PostDto;
+import com.study.sns.domain.post.dto.UpdatePostDto;
 import com.study.sns.domain.post.model.entity.Post;
 import com.study.sns.domain.user.model.entity.User;
 import com.study.sns.domain.post.repository.PostRepository;
@@ -23,19 +25,18 @@ public class PostService {
      */
     @Transactional
     public PostDto createPost(
-            String title,
-            String content
+            CreatePostDto.Request req
     ) {
 
         // 현재 로그인 중인 사용자 엔티티 로드
-        User user = userService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
 
         // article save
         Post savedPost = postRepository.save(
                 Post.of(
-                        title,
-                        content,
-                        user
+                        req.getTitle(),
+                        req.getContent(),
+                        currentUser
                 )
         );
 
@@ -47,9 +48,7 @@ public class PostService {
      */
     @Transactional
     public void updatePost(
-            String title,
-            String content,
-            Long postId
+            UpdatePostDto.Request req
     ) {
 
         User user = userService.getCurrentUser();
