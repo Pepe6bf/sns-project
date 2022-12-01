@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,24 +43,21 @@ public class UserControllerTest {
         // Given
         UserJoinRequest req = new UserJoinRequest(
                 "tester@email.com",
-                "testerPw1234!");
+                "testerPw1234!"
+        );
+        UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
+        given(userService.join(any(UserJoinServiceDto.class)))
+                .willReturn(UserDto.fromEntity(
+                        User.of(
+                                userJoinServiceDto.getEmail(),
+                                passwordEncoder.encode(userJoinServiceDto.getPassword())
+                        )));
 
         // When
-        // Controller DTO -> Service DTO 변화
-        UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
-        when(userService.join(any(UserJoinServiceDto.class)))
-                .thenReturn(
-                        UserDto.fromEntity(
-                                User.of(
-                                        userJoinServiceDto.getEmail(),
-                                        passwordEncoder.encode(userJoinServiceDto.getPassword())
-                                ))
-                );
-
-        // Then
         mockMvc.perform(post("/api/v1/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(req)))
+                // Then
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -71,20 +68,18 @@ public class UserControllerTest {
         // Given
         UserJoinRequest req = new UserJoinRequest(
                 "tester@email.com",
-                "testerPw1234!");
+                "testerPw1234!"
+        );
+        UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
+        given(userService.join(any(UserJoinServiceDto.class)))
+                .willThrow(
+                        new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL));
 
         // When
-        // Controller DTO -> Service DTO 변화
-        UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
-        when(userService.join(any(UserJoinServiceDto.class)))
-                .thenThrow(
-                        new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL)
-                );
-
-        // Then
         mockMvc.perform(post("/api/v1/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(req)))
+                // Then
                 .andDo(print())
                 .andExpect(status().isConflict());
     }
