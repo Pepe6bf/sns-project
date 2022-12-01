@@ -28,17 +28,17 @@ public class UserService {
      */
     @Transactional
     public UserDto join(
-            UserJoinServiceDto req
+            UserJoinServiceDto dto
     ) {
         // 이미 가입된 email 인지 검증
-        checkUserExist(req.getEmail());
+        checkUserExist(dto.getEmail());
 
         // 회원가입 진행 및 응답
         return UserDto.fromEntity(
                 userRepository.save(
                         User.of(
-                                req.getEmail(),
-                                req.getPassword()
+                                dto.getEmail(),
+                                dto.getPassword()
                         )
                 )
         );
@@ -48,18 +48,18 @@ public class UserService {
      * 로그인을 수행하는 비즈니스 로직
      */
     public String login(
-            LocalLoginServiceDto req
+            LocalLoginServiceDto dto
     ) {
         // 회원가입 여부 체크
-        User userEntity = loadUserByEmail(req.getEmail());
+        User userEntity = loadUserByEmail(dto.getEmail());
 
         // 비밀번호 체크
-        if (!passwordEncoder.matches(req.getPassword(), userEntity.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), userEntity.getPassword())) {
             throw new SnsApplicationException(AccountErrorCode.INVALID_PASSWORD);
         }
 
         // 토큰 생성
-        return jwtService.generateToken(req.getEmail());
+        return jwtService.generateToken(dto.getEmail());
     }
 
     // 존재하는 사용자인지 검증
