@@ -30,7 +30,7 @@ public class UserController {
         return responseService.getSingleResult(
                 "성공적으로 수행되었습니다.",
                 UserJoinDto.Response.of(
-                        userService.join(req.getEmail(), req.getPassword())
+                        userService.join(req)
                 )
         );
     }
@@ -46,7 +46,7 @@ public class UserController {
         return responseService.getSingleResult(
                 "성공적으로 수행되었습니다.",
                 LocalLoginDto.Response.of(
-                        userService.login(req.getEmail(), req.getPassword())
+                        userService.login(req)
                 )
         );
     }
