@@ -1,6 +1,6 @@
-package com.study.sns.repository;
+package com.study.sns.domain.user.repository;
 
-import com.study.sns.model.entity.User;
+import com.study.sns.domain.user.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

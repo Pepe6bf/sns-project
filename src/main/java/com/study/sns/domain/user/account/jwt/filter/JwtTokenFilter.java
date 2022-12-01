@@ -1,7 +1,7 @@
-package com.study.sns.jwt.filter;
+package com.study.sns.domain.user.account.jwt.filter;
 
-import com.study.sns.jwt.UserPrincipal;
-import com.study.sns.jwt.JwtService;
+import com.study.sns.domain.user.account.jwt.UserPrincipal;
+import com.study.sns.domain.user.account.jwt.JwtService;
 import com.study.sns.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,6 @@
-package com.study.sns.jwt;
+package com.study.sns.domain.user.account.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.sns.global.exception.AccountErrorCode;
+import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
 import com.study.sns.global.response.ErrorResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

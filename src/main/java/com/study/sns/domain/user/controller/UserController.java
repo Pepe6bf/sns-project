@@ -1,7 +1,7 @@
-package com.study.sns.controller;
+package com.study.sns.domain.user.controller;
 
-import com.study.sns.dto.LocalLoginDto;
-import com.study.sns.dto.UserJoinDto;
+import com.study.sns.domain.user.dto.LocalLoginDto;
+import com.study.sns.domain.user.dto.UserJoinDto;
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
 import com.study.sns.domain.user.service.UserService;

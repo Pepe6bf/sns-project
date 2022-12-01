@@ -1,4 +1,4 @@
-package com.study.sns.jwt;
+package com.study.sns.domain.user.account.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

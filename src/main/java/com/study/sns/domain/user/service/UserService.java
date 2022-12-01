@@ -1,11 +1,11 @@
-package com.study.sns.service;
+package com.study.sns.domain.user.service;
 
-import com.study.sns.dto.UserDto;
-import com.study.sns.global.exception.AccountErrorCode;
+import com.study.sns.domain.user.dto.UserDto;
+import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
 import com.study.sns.global.exception.SnsApplicationException;
-import com.study.sns.jwt.JwtService;
-import com.study.sns.model.entity.User;
-import com.study.sns.repository.UserRepository;
+import com.study.sns.domain.user.account.jwt.JwtService;
+import com.study.sns.domain.user.model.entity.User;
+import com.study.sns.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

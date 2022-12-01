@@ -1,8 +1,8 @@
-package com.study.sns.model.entity;
+package com.study.sns.domain.user.model.entity;
 
 import com.study.sns.global.config.audit.BaseTimeEntity;
-import com.study.sns.model.constant.UserRole;
-import com.study.sns.model.constant.UserStatus;
+import com.study.sns.domain.user.model.constant.UserRole;
+import com.study.sns.domain.user.model.constant.UserStatus;
 import lombok.*;
 
 import javax.persistence.*;

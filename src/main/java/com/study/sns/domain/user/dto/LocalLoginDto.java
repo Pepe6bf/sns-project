@@ -1,4 +1,4 @@
-package com.study.sns.dto;
+package com.study.sns.domain.user.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;

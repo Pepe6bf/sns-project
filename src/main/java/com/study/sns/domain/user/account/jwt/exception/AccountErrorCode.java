@@ -1,5 +1,6 @@
-package com.study.sns.global.exception;
+package com.study.sns.domain.user.account.jwt.exception;
 
+import com.study.sns.global.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

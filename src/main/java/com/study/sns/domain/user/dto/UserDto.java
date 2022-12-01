@@ -1,8 +1,8 @@
-package com.study.sns.dto;
+package com.study.sns.domain.user.dto;
 
-import com.study.sns.model.constant.UserRole;
-import com.study.sns.model.constant.UserStatus;
-import com.study.sns.model.entity.User;
+import com.study.sns.domain.user.model.constant.UserRole;
+import com.study.sns.domain.user.model.constant.UserStatus;
+import com.study.sns.domain.user.model.entity.User;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

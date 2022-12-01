@@ -1,8 +1,8 @@
-package com.study.sns.jwt;
+package com.study.sns.domain.user.account.jwt;
 
-import com.study.sns.model.constant.UserRole;
-import com.study.sns.model.constant.UserStatus;
-import com.study.sns.model.entity.User;
+import com.study.sns.domain.user.model.constant.UserRole;
+import com.study.sns.domain.user.model.constant.UserStatus;
+import com.study.sns.domain.user.model.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
