@@ -15,4 +15,8 @@ public class LocalLoginRequest {
 
     private String email;
     private String password;
+
+    public LocalLoginServiceDto toServiceDto() {
+        return new LocalLoginServiceDto(email, password);
+    }
 }

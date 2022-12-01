@@ -1,6 +1,7 @@
 package com.study.sns.domain.user.controller;
 
-import com.study.sns.domain.user.dto.LocalLoginDto;
+import com.study.sns.domain.user.dto.LocalLoginRequest;
+import com.study.sns.domain.user.dto.LocalLoginResponse;
 import com.study.sns.domain.user.dto.UserJoinRequest;
 import com.study.sns.domain.user.dto.UserJoinResponse;
 import com.study.sns.global.response.ResponseService;
@@ -37,15 +38,12 @@ public class UserController {
      * 로그인 API
      */
     @PostMapping("/login")
-    public SingleResponse<LocalLoginDto.Response> login(
-            @RequestBody LocalLoginDto.Request req
+    public SingleResponse<LocalLoginResponse> login(
+            @RequestBody LocalLoginRequest req
     ) {
-
         return responseService.getSingleResult(
                 "성공적으로 수행되었습니다.",
-                LocalLoginDto.Response.of(
-                        userService.login(req)
-                )
+                LocalLoginResponse.of(userService.login(req.toServiceDto()))
         );
     }
 }

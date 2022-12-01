@@ -1,9 +1,9 @@
 package com.study.sns.domain.user.service;
 
-import com.study.sns.domain.user.dto.LocalLoginDto;
+import com.study.sns.domain.user.dto.LocalLoginServiceDto;
 import com.study.sns.domain.user.dto.UserDto;
 import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
-import com.study.sns.domain.user.dto.UserJoinDto;
+import com.study.sns.domain.user.dto.UserJoinServiceDto;
 import com.study.sns.global.exception.SnsApplicationException;
 import com.study.sns.domain.user.account.jwt.JwtService;
 import com.study.sns.domain.user.model.entity.User;
@@ -28,7 +28,7 @@ public class UserService {
      */
     @Transactional
     public UserDto join(
-            UserJoinDto.Request req
+            UserJoinServiceDto req
     ) {
         // 이미 가입된 email 인지 검증
         checkUserExist(req.getEmail());
@@ -38,7 +38,7 @@ public class UserService {
                 userRepository.save(
                         User.of(
                                 req.getEmail(),
-                                passwordEncoder.encode(req.getPassword())
+                                req.getPassword()
                         )
                 )
         );
@@ -48,7 +48,7 @@ public class UserService {
      * 로그인을 수행하는 비즈니스 로직
      */
     public String login(
-            LocalLoginDto.Request req
+            LocalLoginServiceDto req
     ) {
         // 회원가입 여부 체크
         User userEntity = loadUserByEmail(req.getEmail());
