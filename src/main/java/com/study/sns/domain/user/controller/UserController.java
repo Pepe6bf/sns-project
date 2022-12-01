@@ -1,7 +1,8 @@
 package com.study.sns.domain.user.controller;
 
 import com.study.sns.domain.user.dto.LocalLoginDto;
-import com.study.sns.domain.user.dto.UserJoinDto;
+import com.study.sns.domain.user.dto.UserJoinRequest;
+import com.study.sns.domain.user.dto.UserJoinResponse;
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
 import com.study.sns.domain.user.service.UserService;
@@ -23,15 +24,12 @@ public class UserController {
      * 회원가입 API
      */
     @PostMapping("/join")
-    public SingleResponse<UserJoinDto.Response> join(
-            @RequestBody UserJoinDto.Request req
+    public SingleResponse<UserJoinResponse> join(
+            @RequestBody UserJoinRequest req
     ) {
-        // join
         return responseService.getSingleResult(
                 "성공적으로 수행되었습니다.",
-                UserJoinDto.Response.of(
-                        userService.join(req)
-                )
+                UserJoinResponse.of(userService.join(req.toServiceDto()))
         );
     }
 
