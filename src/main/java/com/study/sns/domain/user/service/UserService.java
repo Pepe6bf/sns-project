@@ -1,13 +1,13 @@
 package com.study.sns.domain.user.service;
 
+import com.study.sns.domain.user.account.jwt.JwtService;
+import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
 import com.study.sns.domain.user.dto.LocalLoginServiceDto;
 import com.study.sns.domain.user.dto.UserDto;
-import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
 import com.study.sns.domain.user.dto.UserJoinServiceDto;
-import com.study.sns.global.exception.SnsApplicationException;
-import com.study.sns.domain.user.account.jwt.JwtService;
 import com.study.sns.domain.user.model.entity.User;
 import com.study.sns.domain.user.repository.UserRepository;
+import com.study.sns.global.exception.SnsApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +38,7 @@ public class UserService {
                 userRepository.save(
                         User.of(
                                 dto.getEmail(),
-                                dto.getPassword()
+                                passwordEncoder.encode(dto.getPassword())
                         )
                 )
         );
