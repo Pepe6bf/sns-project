@@ -1,9 +1,10 @@
 package com.study.sns.domain.post.controller;
 
-import com.study.sns.domain.post.dto.CreatePostDto;
+import com.study.sns.domain.post.dto.CreatePostRequest;
+import com.study.sns.domain.post.dto.CreatePostResponse;
+import com.study.sns.domain.post.service.PostService;
 import com.study.sns.global.response.ResponseService;
 import com.study.sns.global.response.SingleResponse;
-import com.study.sns.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +23,14 @@ public class PostController {
      * 게시글 생성 API
      */
     @PostMapping
-    public SingleResponse<CreatePostDto.Response> createPost(
-            @RequestBody CreatePostDto.Request req
+    public SingleResponse<CreatePostResponse> createPost(
+            @RequestBody CreatePostRequest req
     ) {
         return responseService.getSingleResult(
                 "게시글이 성공적으로 작성되었습니다.",
-                CreatePostDto.Response.of(
+                CreatePostResponse.of(
                         postService.createPost(
-                                req
+                                req.toServiceDto()
                         )
                 )
         );
