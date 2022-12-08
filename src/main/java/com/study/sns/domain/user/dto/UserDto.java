@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 public class UserDto {
 
-    private Long id;
+    private Long userId;
 
     private String email;
 
@@ -18,12 +18,12 @@ public class UserDto {
     private UserStatus status;
 
     private UserDto(
-            Long id,
+            Long userId,
             String email,
             UserRole role,
             UserStatus status
     ) {
-        this.id = id;
+        this.userId = userId;
         this.email = email;
         this.role = role;
         this.status = status;
