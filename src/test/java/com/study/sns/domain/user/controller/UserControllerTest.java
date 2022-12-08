@@ -3,9 +3,9 @@ package com.study.sns.domain.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.sns.domain.user.account.jwt.exception.AccountErrorCode;
 import com.study.sns.domain.user.dto.*;
-import com.study.sns.domain.user.model.entity.User;
 import com.study.sns.domain.user.service.UserService;
 import com.study.sns.global.exception.SnsApplicationException;
+import com.study.sns.global.util.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +30,8 @@ public class UserControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @MockBean
     private UserService userService;
 
@@ -43,10 +46,11 @@ public class UserControllerTest {
         UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
         given(userService.join(any(UserJoinServiceDto.class)))
                 .willReturn(UserDto.fromEntity(
-                        User.of(
+                        UserFixture.get(
                                 userJoinServiceDto.getEmail(),
-                                userJoinServiceDto.getPassword()
-                        )));
+                                passwordEncoder.encode(userJoinServiceDto.getPassword()
+                                )))
+                );
 
         // When
         mockMvc.perform(post("/api/v1/user/join")
@@ -68,7 +72,8 @@ public class UserControllerTest {
         UserJoinServiceDto userJoinServiceDto = req.toServiceDto();
         given(userService.join(any(UserJoinServiceDto.class)))
                 .willThrow(
-                        new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL));
+                        new SnsApplicationException(AccountErrorCode.DUPLICATED_USER_EMAIL)
+                );
 
         // When
         mockMvc.perform(post("/api/v1/user/join")
