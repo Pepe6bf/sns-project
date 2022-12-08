@@ -2,7 +2,7 @@ package com.study.sns.domain.post.service;
 
 import com.study.sns.domain.post.dto.CreatePostServiceDto;
 import com.study.sns.domain.post.dto.PostDto;
-import com.study.sns.domain.post.dto.UpdatePostDto;
+import com.study.sns.domain.post.dto.UpdatePostServiceDto;
 import com.study.sns.domain.post.model.entity.Post;
 import com.study.sns.domain.post.repository.PostRepository;
 import com.study.sns.domain.user.model.entity.User;
@@ -48,7 +48,7 @@ public class PostService {
      */
     @Transactional
     public void updatePost(
-            UpdatePostDto.Request req
+            UpdatePostServiceDto dto
     ) {
 
         User user = userService.getCurrentUser();
