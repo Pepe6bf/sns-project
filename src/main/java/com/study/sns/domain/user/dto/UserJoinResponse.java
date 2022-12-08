@@ -14,7 +14,7 @@ public class UserJoinResponse {
 
     public static UserJoinResponse of(UserDto userDto) {
         return new UserJoinResponse(
-                userDto.getId(),
+                userDto.getUserId(),
                 userDto.getEmail(),
                 userDto.getRole()
         );
