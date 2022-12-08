@@ -13,19 +13,22 @@ public class PostDto {
     private final String content;
     private final User user;
     private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     private PostDto(
             Long postId,
             String title,
             String content,
             User user,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
         this.postId = postId;
         this.title = title;
         this.content = content;
         this.user = user;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public static PostDto fromEntity(Post post) {
@@ -34,7 +37,8 @@ public class PostDto {
                 post.getTitle(),
                 post.getContent(),
                 post.getUser(),
-                post.getCreatedAt()
+                post.getCreatedAt(),
+                post.getUpdatedAt()
         );
     }
 }
