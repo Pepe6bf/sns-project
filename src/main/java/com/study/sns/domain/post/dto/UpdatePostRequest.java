@@ -18,4 +18,8 @@ public class UpdatePostRequest {
         this.title = title;
         this.content = content;
     }
+
+    public UpdatePostServiceDto toServiceDto() {
+        return new UpdatePostServiceDto(title, content);
+    }
 }

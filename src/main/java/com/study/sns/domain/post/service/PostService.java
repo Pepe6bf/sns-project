@@ -31,7 +31,7 @@ public class PostService {
         // 현재 로그인 중인 사용자 엔티티 로드
         User currentUser = userService.getCurrentUser();
 
-        // article save
+        // post save
         Post savedPost = postRepository.save(
                 Post.of(
                         dto.getTitle(),
@@ -47,15 +47,16 @@ public class PostService {
      * 게시글을 수정하는 비즈니스 로직
      */
     @Transactional
-    public void updatePost(
+    public PostDto updatePost(
             UpdatePostServiceDto dto
     ) {
 
         User user = userService.getCurrentUser();
 
-        // article exist
+        // post exist
 
-        // article permission
+        // post permission
 
+        return null;
     }
 }
