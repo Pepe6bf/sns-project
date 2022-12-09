@@ -1,9 +1,9 @@
 package com.study.sns.global.config.security;
 
-import com.study.sns.jwt.CustomAuthenticationEntryPoint;
-import com.study.sns.jwt.filter.JwtTokenFilter;
-import com.study.sns.jwt.JwtService;
-import com.study.sns.service.UserService;
+import com.study.sns.domain.user.account.jwt.CustomAuthenticationEntryPoint;
+import com.study.sns.domain.user.account.jwt.filter.JwtTokenFilter;
+import com.study.sns.domain.user.account.jwt.JwtService;
+import com.study.sns.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
